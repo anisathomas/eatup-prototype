@@ -11,11 +11,20 @@ app.get('/api/hello', (req, res) => {
 app.get('/api/search', (req, res) => {
   client.search({
     offset: 5,
-    categories: 'bubbletea',
-    location: 'toronto, on'
+    categories: 'chinese',
+    location: 'chicago, il'
   }).then(response => {
-    const businesseNames = response.jsonBody.businesses
-    res.send(getName(businesseNames));
+
+    const businesses = response.jsonBody.businesses
+    const restaurantData = [];
+
+    businesses.map(business => {
+       const data = {name: business.name, image: business.image_url};
+       restaurantData.push(data)
+     })
+
+    res.send(restaurantData);
+
   }).catch(e => {
     console.log(e);
   });
@@ -28,11 +37,4 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 
 const client = yelp.client('sqO1jfckyHBvxwS4GaxCdOKVR8CPGAF9dmjXsSUNQCNmw7hXoxez-AiGrLsjI2KNAIlAxjbRqb_ZuiIzb-8fAzcZakqeLooDK_FRAr81Vx7HeiDBkDTvwF9ydtUzW3Yx');
 
-function getName(array) {
-  var businessArray = []
-  for(var i = 0; i < array.length; i++){
-    businessArray.push(array[i].name);
-  }
-  return businessArray;
-}
 

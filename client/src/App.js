@@ -4,7 +4,7 @@ import './App.css';
 
 class App extends Component {
   state = {
-    response: ''
+    response: []
   };
 
   componentDidMount() {
@@ -29,12 +29,16 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
-        <p className="App-intro">
-         {this.state.response}
-        </p>
+        {this.state.response.map(res => (
+          <div>
+            <h5>{res.name}</h5>
+            <img src={res.image} alt={res.name}/>
+          </div>
+          ))}
       </div>
     );
   }
 }
+
 
 export default App;
