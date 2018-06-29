@@ -1,21 +1,29 @@
 const express = require('express');
 const yelp = require('yelp-fusion');
+const bodyParser = require('body-parser')
+const cors = require('cors')
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+app.use(cors());
+app.use(bodyParser.json())
 
 app.get('/api/hello', (req, res) => {
   res.send({ message: 'Hello From Express' });
 });
 
-app.get('/api/search', (req, res) => {
+app.post('/api/search/:location/:category', (req, res) => {
+  const location = req.params.location
+  const category = req.params.category
   client.search({
     offset: 5,
-    categories: 'chinese',
-    location: 'chicago, il'
+    categories: category,
+    location: location
   }).then(response => {
 
     const businesses = response.jsonBody.businesses
+    console.log(businesses)
     const restaurantData = [];
 
     businesses.map(business => {
@@ -30,6 +38,7 @@ app.get('/api/search', (req, res) => {
   });
 
 });
+
 
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
