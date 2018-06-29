@@ -10,7 +10,8 @@ class App extends Component {
     this.state = {
       response: [],
       location: '',
-      category: ''
+      category: '',
+      current_index: 4
     };
   }
 
@@ -20,7 +21,6 @@ class App extends Component {
 
   getUserInput = (e) => {
     e.preventDefault();
-    console.log('hello')
     this.setState({
       location: e.target.location.value,
       category: e.target.category.value
@@ -52,16 +52,19 @@ class App extends Component {
           <h1 className="App-title">EatUp</h1>
         </header>
         <Form getUserInput = {this.getUserInput}/>
-        {this.state.response.map(res => (
-          <div>
-            <h5>{res.name}</h5>
-            <img src={res.image} alt={res.name}/>
-          </div>
+        {this.state.response.map((res, i) => (
+            <div style={{display: i === this.state.current_index ? 'block' : 'none'}}>
+              <h5>{res.name}</h5>
+              <h5>{res.address}</h5>
+              <h6>{res.phone}</h6>
+              <img src={res.image} alt={res.name}/>
+            </div>
           ))}
       </div>
     );
   }
 }
 
-
 export default App;
+
+//Each child in an array or iterator should have a unique "key" prop.
