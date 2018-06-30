@@ -11,7 +11,7 @@ class App extends Component {
       response: [],
       location: '',
       category: '',
-      current_index: 4
+      current_card: 0
     };
   }
 
@@ -44,6 +44,20 @@ class App extends Component {
     .catch(err => console.log(err))
   }
 
+  increment = (e) => {
+   e.preventDefault()
+   this.setState({
+     current_card: this.state.current_card + 1
+   });
+  }
+
+  decrease = (e) => {
+   e.preventDefault()
+   this.setState({
+     current_card: this.state.current_card - 1
+   });
+  }
+
   render() {
     return (
       <div className="App">
@@ -52,11 +66,25 @@ class App extends Component {
           <h1 className="App-title">EatUp</h1>
         </header>
         <Form getUserInput = {this.getUserInput}/>
+        <div>
+          {this.state.current_card > 0 &&
+             <button onClick={this.decrease}>
+              Previous option
+              </button>
+          }
+          {this.state.current_card < 19 &&
+             <button onClick={this.increment}>
+               Next Option
+             </button>
+          }
+       </div>
         {this.state.response.map((res, i) => (
-            <div style={{display: i === this.state.current_index ? 'block' : 'none'}}>
+            <div style={{display: i === this.state.current_card ? 'block' : 'none'}}>
               <h5>{res.name}</h5>
               <h5>{res.address}</h5>
-              <h6>{res.phone}</h6>
+              <h5>Phone: {res.phone}</h5>
+              <h5>Price: {res.money}</h5>
+              <h5>Rating: {res.rating}</h5>
               <img src={res.image} alt={res.name}/>
             </div>
           ))}

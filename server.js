@@ -22,7 +22,14 @@ app.post('/api/search/:location/:category', (req, res) => {
     const restaurantData = [];
 
     businesses.map(business => {
-       const data = {name: business.name, image: business.image_url, address: business.location.display_address, phone:business.display_phone};
+       const data = {
+        name: business.name,
+        image: business.image_url,
+        address: business.location.display_address,
+        phone:business.display_phone,
+        money: business.price,
+        rating: business.rating
+      };
        restaurantData.push(data)
        console.log(data)
      })
