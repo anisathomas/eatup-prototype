@@ -6,10 +6,9 @@ class Form extends React.Component {
     return (
       <div>
         <form onSubmit= {this.props.getUserInput}>
-          <input type='text' name='location' placeholder='location'/>
           <input type='int' name='radius' placeholder='radius'/>
           <input type='text' name='category' placeholder='category'/>
-          <button>Get Info</button>
+          <button>Find Restaurants!</button>
         </form>
       </div>
     );

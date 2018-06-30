@@ -9,9 +9,11 @@ class App extends Component {
     super(props)
     this.state = {
       response: [],
-      location: '',
       category: '',
-      current_card: 0
+      radius: 0,
+      current_card: 0,
+      latitude: 0,
+      longitude: 0
     };
   }
 
@@ -22,18 +24,18 @@ class App extends Component {
   getUserInput = (e) => {
     e.preventDefault();
     this.setState({
-      location: e.target.location.value,
       category: e.target.category.value,
       radius: e.target.radius.value
     });
 
-    fetch(`http://localhost:5000/api/search/${e.target.location.value}/${e.target.category.value}/${e.target.radius.value}`, {
+    fetch(`http://localhost:5000/api/search/${e.target.category.value}/${e.target.radius.value}/${this.state.latitude}/${this.state.longitude}`, {
       method: "POST",
       headers: {
         'Content-type': 'application/json'
       },
       body: JSON.stringify({
-        location: e.target.location.value,
+        latitude: this.state.latitude,
+        longitude: this.state.longitude,
         category: e.target.category.value,
         radius: e.target.radius.value
       })
@@ -68,16 +70,12 @@ class App extends Component {
       return;
     }
 
-    function success(position) {
+    var success = (position) => {
       var latitude  = position.coords.latitude;
       var longitude = position.coords.longitude;
+      this.setState({latitude: latitude, longitude: longitude});
 
       output.innerHTML = '<p>Latitude is ' + latitude + '° <br>Longitude is ' + longitude + '°</p>';
-
-      var img = new Image();
-      img.src = "https://maps.googleapis.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=13&size=300x300&sensor=false";
-
-      output.appendChild(img);
     }
 
     function error() {
@@ -110,7 +108,7 @@ class App extends Component {
           }
        </div>
 
-       <p><button onClick={this.geoFindMe}>Show my location</button></p>
+       <p><button onClick={this.geoFindMe}>Use my location</button></p>
         <div id="out"></div>
 
         {this.state.response.map((res, i) => (
@@ -120,6 +118,8 @@ class App extends Component {
               <h5>Phone: {res.phone}</h5>
               <h5>Price: {res.money}</h5>
               <h5>Rating: {res.rating}</h5>
+              <h5>Lat: {res.latitude}</h5>
+              <h5>Long: {res.longitude}</h5>
               <img src={res.image} alt={res.name}/>
             </div>
           ))}
@@ -129,5 +129,7 @@ class App extends Component {
 }
 
 export default App;
+
+
 
 //Each child in an array or iterator should have a unique "key" prop.

@@ -9,13 +9,17 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(bodyParser.json())
 
-app.post('/api/search/:location/:category/:radius', (req, res) => {
-  const location = req.params.location
+app.post('/api/search/:category/:radius/:latitude/:longitude', (req, res) => {
   const category = req.params.category
   const radius = req.params.radius
+  const latitude = req.params.latitude
+  const longitude = req.params.longitude
+  console.log(latitude)
+  console.log(longitude)
   client.search({
+    latitude: latitude,
+    longitude: longitude,
     categories: category,
-    location: location,
     radius: radius
   }).then(response => {
 
@@ -30,10 +34,12 @@ app.post('/api/search/:location/:category/:radius', (req, res) => {
         address: business.location.display_address,
         phone:business.display_phone,
         money: business.price,
-        rating: business.rating
+        rating: business.rating,
+        latitude: business.coordinates.latitude,
+        longitude: business.coordinates.longitude
       };
        restaurantData.push(data)
-       console.log(data)
+
      })
 
     res.send(restaurantData);
@@ -50,4 +56,4 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 
 const client = yelp.client('sqO1jfckyHBvxwS4GaxCdOKVR8CPGAF9dmjXsSUNQCNmw7hXoxez-AiGrLsjI2KNAIlAxjbRqb_ZuiIzb-8fAzcZakqeLooDK_FRAr81Vx7HeiDBkDTvwF9ydtUzW3Yx');
 
-
+//search criteria for yelp should be the radius and long & lat
