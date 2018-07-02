@@ -2,16 +2,16 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Form from './components/form.jsx'
+import Swipes from './components/swipes.jsx'
 
 class App extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      response: [],
+      data: [],
       category: '',
       radius: 0,
-      current_card: 0,
       latitude: 0,
       longitude: 0
     };
@@ -42,24 +42,10 @@ class App extends Component {
     })
     .then(res => res.json())
     .then(data => {
-      this.setState({ response: data})
+      this.setState({data})
       console.log(data)
     })
     .catch(err => console.log(err))
-  }
-
-  increment = (e) => {
-   e.preventDefault()
-   this.setState({
-     current_card: this.state.current_card + 1
-   });
-  }
-
-  decrease = (e) => {
-   e.preventDefault()
-   this.setState({
-     current_card: this.state.current_card - 1
-   });
   }
 
   geoFindMe = () => {
@@ -75,8 +61,9 @@ class App extends Component {
       var longitude = position.coords.longitude;
       this.setState({latitude: latitude, longitude: longitude});
 
-      output.innerHTML = '<p>Latitude is ' + latitude + '° <br>Longitude is ' + longitude + '°</p>';
+      output.innerHTML = '<p>Your Latitude is ' + latitude + '° <br>Your Longitude is ' + longitude + '°</p>';
     }
+
 
     function error() {
       output.innerHTML = "Unable to retrieve your location";
@@ -95,34 +82,9 @@ class App extends Component {
           <h1 className="App-title">EatUp</h1>
         </header>
         <Form getUserInput = {this.getUserInput}/>
-        <div>
-          {this.state.current_card > 0 &&
-             <button onClick={this.decrease}>
-              Previous option
-              </button>
-          }
-          {this.state.current_card < 19 &&
-             <button onClick={this.increment}>
-               Next Option
-             </button>
-          }
-       </div>
-
-       <p><button onClick={this.geoFindMe}>Use my location</button></p>
+        <p><button onClick={this.geoFindMe}>Use my location</button></p>
         <div id="out"></div>
-
-        {this.state.response.map((res, i) => (
-            <div style={{display: i === this.state.current_card ? 'block' : 'none'}}>
-              <h5>{res.name}</h5>
-              <h5>{res.address}</h5>
-              <h5>Phone: {res.phone}</h5>
-              <h5>Price: {res.money}</h5>
-              <h5>Rating: {res.rating}</h5>
-              <h5>Lat: {res.latitude}</h5>
-              <h5>Long: {res.longitude}</h5>
-              <img src={res.image} alt={res.name}/>
-            </div>
-          ))}
+        <Swipes data={this.state.data}/>
       </div>
     );
   }
@@ -130,6 +92,7 @@ class App extends Component {
 
 export default App;
 
-
-
+//Changes/needs to be done:
+//need to do km params & reset category to lowercase
+//changed response to data, took out increment & deincrement func & buttons. Added swipe functionality to restaurants
 //Each child in an array or iterator should have a unique "key" prop.

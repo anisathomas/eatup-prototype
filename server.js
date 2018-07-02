@@ -35,8 +35,6 @@ app.post('/api/search/:category/:radius/:latitude/:longitude', (req, res) => {
         phone:business.display_phone,
         money: business.price,
         rating: business.rating,
-        latitude: business.coordinates.latitude,
-        longitude: business.coordinates.longitude
       };
        restaurantData.push(data)
 
